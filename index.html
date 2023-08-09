@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Alunos</title>
+</head>
+<body>
+
+    <form id="form1">
+        DIGITE A MATRÍCULA: <input type="text" name="matricula">
+        <br>  <br>
+        DIGITE O NOME: <input type="text" name="nome">
+        <br>   <br>
+        
+        <button type="button" onclick="enviarDados()">
+           Inserir
+        </button>
+
+    </form>
+
+    <br> <br>
+
+    <table align="center" width="400px" border="1" id="tabela1">
+        <tr>
+            <td> MATRÍCULA </td>  <td> NOME </td>
+        </tr>
+    </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function enviarDados() {
+            // Pegar os dados do formulário
+            var dados = $('#form1').serialize();
+
+            // Enviar dados para o PHP usando AJAX
+            $.ajax({
+                type: "POST",
+                url: "arquivo.php", // Nome do arquivo PHP
+                data: dados,
+                dataType: 'json',
+                success: function(response) {
+                    // Inserir nova linha na tabela com os dados retornados pelo PHP
+                    var tabela = document.getElementById("tabela1");
+                    var numeroLinhas = tabela.rows.length;
+                    var linha = tabela.insertRow(numeroLinhas);
+                    var coluna1 = linha.insertCell(0);
+                    var coluna2 = linha.insertCell(1);  
+                    coluna1.innerHTML = response.matricula;
+                    coluna2.innerHTML = response.nome;
+                },
+                error: function(xhr, status, error) {
+                    alert('Ocorreu um erro ao enviar os dados: ' + error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
